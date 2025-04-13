@@ -1,0 +1,26 @@
+[
+  {
+    "id": "business",
+    "name": "Business",
+    "color": "blue",
+    "icon": "BookMarked"
+  },
+  {
+    "id": "personal",
+    "name": "Personal",
+    "color": "green",
+    "icon": "BookMarked"
+  },
+  {
+    "id": "ideas",
+    "name": "Ideas",
+    "color": "amber",
+    "icon": "BookMarked"
+  },
+  {
+    "id": "projects",
+    "name": "Projects",
+    "color": "purple",
+    "icon": "BookMarked"
+  }
+]

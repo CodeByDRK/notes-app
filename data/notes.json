@@ -1,0 +1,55 @@
+[
+  {
+    "id": "new",
+    "title": "New Note",
+    "content": "<b>Lets Get this Done</b><br>note taking",
+    "category": "personal",
+    "tags": [
+      "testing",
+      "productivity"
+    ],
+    "createdAt": "2025-04-13T20:55:08.383Z",
+    "updatedAt": "2025-04-13T20:55:17.261Z",
+    "pinned": false,
+    "views": 0,
+    "isPublic": false
+  },
+  {
+    "id": "9d1dd410-544e-4e25-854c-e369d3ef817f",
+    "title": "Quick Note Test ",
+    "content": "<p>I hope this works <br>Some <strong>bold </strong>text</p>",
+    "category": "ideas",
+    "tags": [],
+    "pinned": false,
+    "isPublic": false,
+    "views": 0,
+    "createdAt": "2025-04-13T21:28:15.555Z",
+    "updatedAt": "2025-04-13T21:28:15.555Z"
+  },
+  {
+    "id": "2a74f7b4-fd45-4f7c-ba40-9fd41796b245",
+    "title": "Remove Canvas Page",
+    "content": "<p>Lets remove the quicknotes page</p>",
+    "category": "personal",
+    "tags": [
+      "canvas delete"
+    ],
+    "pinned": true,
+    "isPublic": true,
+    "views": 0,
+    "createdAt": "2025-04-13T21:52:35.236Z",
+    "updatedAt": "2025-04-13T22:07:42.703Z"
+  },
+  {
+    "id": "83564a3b-a235-48b0-939f-64c891db4afa",
+    "title": "Testing Desk View",
+    "content": "<p>Tested</p>",
+    "category": "business",
+    "tags": [],
+    "pinned": false,
+    "isPublic": false,
+    "views": 0,
+    "createdAt": "2025-04-13T21:53:01.097Z",
+    "updatedAt": "2025-04-13T22:09:57.439Z"
+  }
+]
