@@ -1,12 +1,12 @@
-import { getNotes } from "@/lib/data/data-service"
+import { getNotes } from "@/lib/data/server-data"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import { QuickNoteDialog } from "@/components/notes/quick-note-dialog"
 
-export default async function DeskPage() {
-  const notes = await getNotes()
+export default function DeskPage() {
+  const notes = getNotes()
   const recentNotes = notes.slice(0, 5)
   const pinnedNotes = notes.filter((note) => note.pinned)
 

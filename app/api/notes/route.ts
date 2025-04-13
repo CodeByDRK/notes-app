@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import fs from "fs"
 import path from "path"
-import type { Note } from "@/lib/types"
+import { Note } from "@/lib/types"
 
 const DATA_DIR = path.join(process.cwd(), "data")
 const NOTES_FILE = path.join(DATA_DIR, "notes.json")
@@ -13,35 +13,54 @@ if (!fs.existsSync(DATA_DIR)) {
 
 // Initialize notes file if it doesn't exist
 if (!fs.existsSync(NOTES_FILE)) {
-  fs.writeFileSync(NOTES_FILE, JSON.stringify([], null, 2))
+  fs.writeFileSync(NOTES_FILE, JSON.stringify([]))
+}
+
+function getNotes(): Note[] {
+  try {
+    const data = fs.readFileSync(NOTES_FILE, "utf-8")
+    return JSON.parse(data)
+  } catch (error) {
+    console.error("Failed to read notes:", error)
+    return []
+  }
+}
+
+function saveNotes(notes: Note[]): void {
+  try {
+    fs.writeFileSync(NOTES_FILE, JSON.stringify(notes, null, 2))
+  } catch (error) {
+    console.error("Failed to save notes:", error)
+    throw error
+  }
 }
 
 export async function GET() {
   try {
-    const data = await fs.promises.readFile(NOTES_FILE, "utf-8")
-    const notes = JSON.parse(data)
+    const notes = getNotes()
     return NextResponse.json(notes)
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch notes" }, { status: 500 })
+    console.error("Failed to get notes:", error)
+    return NextResponse.json({ error: "Failed to get notes" }, { status: 500 })
   }
 }
 
 export async function POST(request: Request) {
   try {
-    const note = await request.json()
-    const data = await fs.promises.readFile(NOTES_FILE, "utf-8")
-    const notes = JSON.parse(data)
-    
-    const existingIndex = notes.findIndex((n: Note) => n.id === note.id)
-    if (existingIndex >= 0) {
-      notes[existingIndex] = note
+    const note: Note = await request.json()
+    const notes = getNotes()
+    const index = notes.findIndex((n) => n.id === note.id)
+
+    if (index >= 0) {
+      notes[index] = note
     } else {
       notes.push(note)
     }
-    
-    await fs.promises.writeFile(NOTES_FILE, JSON.stringify(notes, null, 2))
-    return NextResponse.json(note)
+
+    saveNotes(notes)
+    return NextResponse.json({ message: "Note saved successfully" })
   } catch (error) {
+    console.error("Failed to save note:", error)
     return NextResponse.json({ error: "Failed to save note" }, { status: 500 })
   }
 }
@@ -49,12 +68,12 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   try {
     const { id } = await request.json()
-    const data = await fs.promises.readFile(NOTES_FILE, "utf-8")
-    const notes = JSON.parse(data)
-    const filteredNotes = notes.filter((note: Note) => note.id !== id)
-    await fs.promises.writeFile(NOTES_FILE, JSON.stringify(filteredNotes, null, 2))
-    return NextResponse.json({ success: true })
+    const notes = getNotes()
+    const filteredNotes = notes.filter((note) => note.id !== id)
+    saveNotes(filteredNotes)
+    return NextResponse.json({ message: "Note deleted successfully" })
   } catch (error) {
+    console.error("Failed to delete note:", error)
     return NextResponse.json({ error: "Failed to delete note" }, { status: 500 })
   }
 } 

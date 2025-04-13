@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { getNotes, getPopularTags } from "@/lib/data/data-service"
+import { getNotes, getPopularTags } from "@/lib/data/server-data"
 import { NoteCard } from "@/components/notes/note-card"
 import { NoteList } from "@/components/notes/note-list"
 
@@ -15,9 +15,9 @@ export const metadata: Metadata = {
   description: "Search and organize your notes",
 }
 
-export default async function VaultPage() {
-  const notes = await getNotes()
-  const popularTags = await getPopularTags(12)
+export default function VaultPage() {
+  const notes = getNotes()
+  const popularTags = getPopularTags(12)
 
   return (
     <div className="flex flex-col gap-6 p-6 animate-in">

@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 
-import { getRecentNotes, getPinnedNotes, getPopularTags, getCategories } from "@/lib/data/data-service"
+import { getRecentNotes, getPinnedNotes, getPopularTags, getCategories } from "@/lib/data/server-data"
 import { NoteCard } from "@/components/notes/note-card"
 import { CategoryCard } from "@/components/notes/category-card"
 import { QuickActions } from "@/components/dashboard/quick-actions"
@@ -19,11 +19,11 @@ export const metadata: Metadata = {
   description: "Your personal dashboard for managing ideas and notes",
 }
 
-export default async function DashboardPage() {
-  const recentNotes = await getRecentNotes(4)
-  const pinnedNotes = await getPinnedNotes()
-  const popularTags = await getPopularTags(8)
-  const categories = await getCategories()
+export default function DashboardPage() {
+  const recentNotes = getRecentNotes(4)
+  const pinnedNotes = getPinnedNotes()
+  const popularTags = getPopularTags(8)
+  const categories = getCategories()
 
   // Get a featured note (first pinned note or first recent note)
   const featuredNote = pinnedNotes.length > 0 ? pinnedNotes[0] : recentNotes[0]
@@ -98,9 +98,11 @@ export default async function DashboardPage() {
                 <h2 className="text-xl font-semibold tracking-tight">Categories</h2>
                 <p className="text-sm text-muted-foreground">Browse your notes by category</p>
               </div>
+              <Button asChild variant="outline" size="sm">
+                <Link href="/categories">View All</Link>
+              </Button>
             </div>
-
-            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               {categories.map((category) => (
                 <CategoryCard key={category.id} category={category} />
               ))}
@@ -109,52 +111,44 @@ export default async function DashboardPage() {
         </div>
 
         <div className="space-y-6">
-          <FeaturedNote note={featuredNote} />
-
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle>Popular Tags</CardTitle>
-              <CardDescription>Frequently used tags in your notes</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap gap-2">
-                {popularTags.map(({ tag, count }) => (
-                  <Link href={`/vault?tag=${tag}`} key={tag}>
-                    <Badge variant="secondary" className="flex items-center gap-1 px-2 py-1 hover:bg-secondary/80">
-                      <Tag className="h-3 w-3" />
-                      <span>{tag}</span>
-                      <span className="ml-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-xs">{count}</span>
-                    </Badge>
-                  </Link>
-                ))}
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button asChild variant="ghost" size="sm" className="w-full">
-                <Link href="/vault">View All Tags</Link>
-              </Button>
-            </CardFooter>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle>Quick Tip</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                  <Lightbulb className="h-5 w-5 text-primary" />
+          <div className="space-y-4">
+            <div className="space-y-1">
+              <h2 className="text-xl font-semibold tracking-tight">Featured Note</h2>
+              <p className="text-sm text-muted-foreground">Your most recent or pinned note</p>
+            </div>
+            {featuredNote ? (
+              <FeaturedNote note={featuredNote} />
+            ) : (
+              <Card className="flex flex-col items-center justify-center p-8 text-center">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                  <Lightbulb className="h-6 w-6 text-primary" />
                 </div>
-                <div className="space-y-1">
-                  <p className="text-sm">
-                    Use <kbd className="rounded border bg-muted px-1 text-xs">Ctrl</kbd> +{" "}
-                    <kbd className="rounded border bg-muted px-1 text-xs">Space</kbd> to quickly create a new note from
-                    anywhere.
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+                <h3 className="mt-4 text-lg font-medium">No notes yet</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Create your first note to see it featured here.
+                </p>
+                <Button asChild className="mt-4" variant="outline">
+                  <Link href="/notes/new">Create Note</Link>
+                </Button>
+              </Card>
+            )}
+          </div>
+
+          <div className="space-y-4">
+            <div className="space-y-1">
+              <h2 className="text-xl font-semibold tracking-tight">Popular Tags</h2>
+              <p className="text-sm text-muted-foreground">Most used tags in your notes</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {popularTags.map(({ tag, count }) => (
+                <Badge key={tag} variant="secondary" className="flex items-center gap-1">
+                  <Tag className="h-3 w-3" />
+                  <span>{tag}</span>
+                  <span className="ml-1 text-xs text-muted-foreground">({count})</span>
+                </Badge>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
