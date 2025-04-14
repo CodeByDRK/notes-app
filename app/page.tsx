@@ -35,10 +35,10 @@ export default function DashboardPage() {
         <p className="text-muted-foreground">Welcome back! Here's an overview of your notes and ideas.</p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {/* <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <QuickActions className="md:col-span-2 lg:col-span-2" />
         <StatsCards />
-      </div>
+      </div> */}
 
       <div className="grid gap-6 md:grid-cols-3">
         <div className="space-y-6 md:col-span-2">

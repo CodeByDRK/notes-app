@@ -51,5 +51,19 @@
     "views": 0,
     "createdAt": "2025-04-13T21:53:01.097Z",
     "updatedAt": "2025-04-13T22:09:57.439Z"
+  },
+  {
+    "id": "c74d7f55-2f32-47ad-849c-8d82d57510e0",
+    "title": "New Morning Note ",
+    "content": "<p></p>",
+    "category": "business",
+    "tags": [
+      "jobs"
+    ],
+    "pinned": false,
+    "isPublic": true,
+    "views": 0,
+    "createdAt": "2025-04-14T05:30:42.659Z",
+    "updatedAt": "2025-04-14T05:30:42.659Z"
   }
 ]

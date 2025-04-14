@@ -4,9 +4,15 @@ import { cn } from "@/lib/utils"
 import { usePathname } from "next/navigation"
 import { Plus, Star, Trash2 } from "lucide-react"
 import { QuickNoteDialog } from "@/components/notes/quick-note-dialog"
+import { useRef } from "react"
 
 export function Sidebar() {
   const pathname = usePathname()
+  const dialogRef = useRef<{ setOpen: (open: boolean) => void }>(null)
+
+  const openQuickNoteDialog = () => {
+    dialogRef.current?.setOpen(true)
+  }
 
   return (
     <div className="flex h-full flex-col gap-4">
@@ -21,6 +27,7 @@ export function Sidebar() {
               "w-full justify-start",
               pathname === "/" && "bg-muted"
             )}
+            onClick={openQuickNoteDialog}
           >
             <Plus className="mr-2 h-4 w-4" />
             New Note
@@ -47,7 +54,7 @@ export function Sidebar() {
           </Button>
         </div>
       </ScrollArea>
-      <QuickNoteDialog />
+      <QuickNoteDialog ref={dialogRef} />
     </div>
   )
 } 

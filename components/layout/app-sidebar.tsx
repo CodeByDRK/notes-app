@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -23,6 +23,7 @@ import {
   BookMarked,
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { QuickNoteDialog } from "@/components/notes/quick-note-dialog"
 
 interface NavItem {
   title: string
@@ -34,6 +35,7 @@ interface NavItem {
 export function AppSidebar() {
   const pathname = usePathname()
   const [mounted, setMounted] = useState(false)
+  const dialogRef = useRef<{ setOpen: (open: boolean) => void }>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -66,12 +68,11 @@ export function AppSidebar() {
       href: "/profile",
       icon: <User className="h-5 w-5" />,
     },
-    {
-      title: "Settings",
-      href: "/settings",
-      icon: <Settings className="h-5 w-5" />,
-    },
   ]
+
+  const openQuickNoteDialog = () => {
+    dialogRef.current?.setOpen(true)
+  }
 
   if (!mounted) {
     return null
@@ -89,11 +90,13 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent className="p-2">
         <div className="flex flex-col gap-2">
-          <Button variant="default" className="w-full justify-start gap-2 group transition-all" asChild>
-            <Link href="/canvas/new">
-              <Plus className="h-5 w-5 group-hover:rotate-90 transition-transform duration-200" />
-              <span>New Note</span>
-            </Link>
+          <Button 
+            variant="default" 
+            className="w-full justify-start gap-2 group transition-all"
+            onClick={openQuickNoteDialog}
+          >
+            <Plus className="h-5 w-5 group-hover:rotate-90 transition-transform duration-200" />
+            <span>New Note</span>
           </Button>
 
           <Separator className="my-2" />
@@ -187,12 +190,10 @@ export function AppSidebar() {
             <span className="text-sm font-medium">John Doe</span>
             <span className="text-xs text-muted-foreground">Free Plan</span>
           </div>
-          <Button size="sm" variant="ghost" className="ml-auto">
-            <Sparkles className="h-4 w-4 text-amber-500" />
-          </Button>
         </div>
       </SidebarFooter>
       <SidebarRail />
+      <QuickNoteDialog ref={dialogRef} />
     </Sidebar>
   )
 }
